@@ -9,26 +9,29 @@ function useInfiniteScroll({
 }) {
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  const lastItemRef = useCallback((node: HTMLDivElement) => {
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasNextPage) {
-          fetchNextPage();
-        }
-      },
-      {
-        rootMargin: '200% 0px'
+  const lastItemRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
       }
-    );
 
-    if (node) {
-      observerRef.current.observe(node);
-    }
-  }, []);
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasNextPage) {
+            fetchNextPage();
+          }
+        },
+        {
+          rootMargin: '200% 0px'
+        }
+      );
+
+      if (node) {
+        observerRef.current.observe(node);
+      }
+    },
+    [hasNextPage]
+  );
 
   return {
     lastItemRef
