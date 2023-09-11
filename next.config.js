@@ -4,10 +4,8 @@ const nextConfig = {
     NEXT_PUBLIC_BASE_API: process.env.NEXT_PUBLIC_BASE_API
   },
   images: {
-    domains: [
-      'i.dummyjson.com'
-    ]
+    domains: ['i.dummyjson.com', 'robohash.org']
   }
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
