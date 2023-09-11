@@ -2,7 +2,7 @@
 import { Products } from '@/types/products';
 
 import type { ChangeEvent, MouseEvent } from 'react';
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
@@ -11,8 +11,7 @@ import { styled } from 'styled-components';
 
 import { useMutation } from '@tanstack/react-query';
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-
+import { Swiper, SwiperSlide, SwiperClass } from 'swiper/react';
 import { Button, Flexbox, Typography } from '@/components/atoms';
 
 import useQueryProductDetail from '@/hooks/useQueryProductDetail';
@@ -26,6 +25,7 @@ import { NEXT_IMAGE_BLUR_URL } from '@/constants/products';
 function ProductDetail() {
   const params = useParams();
   const { data, inavalidateQuery } = useQueryProductDetail(Number(params.id));
+  const swiperRef = useRef<SwiperClass | null>(null);
 
   const [isEdit, setIsEdit] = useState(false);
   const [editData, setEditData] = useState<Products>();
@@ -73,9 +73,13 @@ function ProductDetail() {
   };
 
   const handleClickViewDetail = (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation(); 
-    alert('이미지 상세보기')
-  }
+    e.stopPropagation();
+    alert('이미지 상세보기');
+  };
+
+  const onSwiperClick = useCallback(() => {
+    swiperRef.current?.slideNext();
+  }, []);
 
   if (!data) return;
 
@@ -85,14 +89,17 @@ function ProductDetail() {
         height: '100dvh',
         paddingTop: TOPBAR_HEIGHT
       }}
+      onClick={onSwiperClick}
     >
       <Swiper
         spaceBetween={50}
         slidesPerView={1}
-        onClick={(swiper) => { swiper.slideNext(); }}
+        onClick={(swiper, e) => {
+          swiperRef.current = swiper;
+        }}
         loop={true}
       >
-        {(editData?.images || data.images || []).map(url => (
+        {(editData?.images || data.images || []).map((url) => (
           <SwiperSlide key={`thumbnail-image-${url}`}>
             <ImageWrap>
               <Image
@@ -103,9 +110,16 @@ function ProductDetail() {
                 placeholder="blur"
                 blurDataURL={NEXT_IMAGE_BLUR_URL}
               />
-              <Button onClick={handleClickViewDetail} style={{
-                position: 'absolute', bottom: 0, left: 0 
-                }}>이미지 상세보기</Button>
+              <Button
+                onClick={handleClickViewDetail}
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0
+                }}
+              >
+                이미지 상세보기
+              </Button>
             </ImageWrap>
           </SwiperSlide>
         ))}
