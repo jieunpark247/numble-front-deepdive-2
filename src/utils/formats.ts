@@ -19,13 +19,12 @@ function parseToDashPhoneNumber(value: string) {
 }
 
 function parserDateFormat(newDate: string, option: '-' | '/') {
-  const date = new Date(newDate);
-
+  const formatNewDate = newDate.replace(/\s/, 'T');
+  const date = new Date(formatNewDate);
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const dayOfWeek = date.getDay();
-
   const daysOfWeekNames = ['일', '월', '화', '수', '목', '금', '토'];
   const dayOfWeekName = daysOfWeekNames[dayOfWeek];
   if (option === '-') return `${year}-${month}-${day} (${dayOfWeekName})`;
