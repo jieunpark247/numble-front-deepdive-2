@@ -35,6 +35,17 @@ const Button = forwardRef<HTMLButtonElement, PropsWithChildren<ButtonProps>>(
   }
 );
 
-const ButtonStyled = styled.button<ButtonProps>``;
+const ButtonStyled = styled.button<ButtonProps>`
+  background-color: gray;
+  color: white;
+  border-radius: 5px;
+  padding: 5px 20px;
+  margin: 5px;
+  border: none;
+  opacity: 0.7;
+  &:hover {
+    opacity: 1;
+  }
+`;
 
 export default Button;
