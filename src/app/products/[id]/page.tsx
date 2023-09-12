@@ -23,6 +23,13 @@ import { putEditProduct } from '@/api/products';
 import { TOPBAR_HEIGHT } from '@/constants/theme';
 import { NEXT_IMAGE_BLUR_URL } from '@/constants/products';
 
+function Icon() {
+  return (
+    <div>
+      <img alt={'tt'} />
+    </div>
+  );
+}
 function ProductDetail() {
   const params = useParams();
   const { data, inavalidateQuery } = useQueryProductDetail(Number(params.id));
@@ -73,9 +80,9 @@ function ProductDetail() {
   };
 
   const handleClickViewDetail = (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation(); 
-    alert('이미지 상세보기')
-  }
+    e.stopPropagation();
+    alert('이미지 상세보기');
+  };
 
   if (!data) return;
 
@@ -89,10 +96,12 @@ function ProductDetail() {
       <Swiper
         spaceBetween={50}
         slidesPerView={1}
-        onClick={(swiper) => { swiper.slideNext(); }}
+        onClick={(swiper) => {
+          swiper.slideNext();
+        }}
         loop={true}
       >
-        {(editData?.images || data.images || []).map(url => (
+        {(editData?.images || data.images || []).map((url) => (
           <SwiperSlide key={`thumbnail-image-${url}`}>
             <ImageWrap>
               <Image
@@ -103,9 +112,17 @@ function ProductDetail() {
                 placeholder="blur"
                 blurDataURL={NEXT_IMAGE_BLUR_URL}
               />
-              <Button onClick={handleClickViewDetail} style={{
-                position: 'absolute', bottom: 0, left: 0 
-                }}>이미지 상세보기</Button>
+              <Button
+                onClick={handleClickViewDetail}
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0
+                }}
+                endIcon={<Icon />}
+              >
+                이미지 상세보기
+              </Button>
             </ImageWrap>
           </SwiperSlide>
         ))}
